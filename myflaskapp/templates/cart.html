@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f9; }
+        h1 { text-align:center; color:#007bff; }
+        table { width:70%; margin:auto; border-collapse:collapse; }
+        th, td { border:1px solid #ddd; padding:10px; text-align:center; }
+        th { background:#007bff; color:white; }
+        .checkout-btn {
+            display:block; width:200px; margin:20px auto;
+            padding:12px; background:linear-gradient(135deg, #28a745, #1e7e34);
+            color:white; text-align:center; border-radius:6px; text-decoration:none;
+            font-weight:bold; transition:all 0.3s ease;
+        }
+        .checkout-btn:hover { background:linear-gradient(135deg, #1e7e34, #155d27); transform:scale(1.05); }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Your Cart</h1>
+    <table>
+        <tr><th>Product</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
+        {% for item in cart %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+            <td>₹{{ item.price }}</td>
+            <td>₹{{ item.qty * item.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2 style="text-align:center;">Grand Total: ₹{{ total }}</h2>
+    <a href="/checkout" class="checkout-btn">Proceed to Checkout</a>
+</body>
+</html>

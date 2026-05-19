@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background:#f4f6f9; }
+        h1 { text-align: center; color: #007bff; margin-bottom:30px; }
+        table { width: 90%; margin: auto; border-collapse: collapse; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: #007bff; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .form-section { width: 60%; margin: 20px auto; padding: 20px; background:white; border: 1px solid #ddd; border-radius: 8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+        .form-section h2 { color: #007bff; margin-bottom:15px; }
+        input, button { padding: 8px; margin: 5px; border:1px solid #ccc; border-radius:5px; }
+        button { background:#007bff; color:white; border:none; cursor:pointer; }
+        button:hover { background:#0056b3; }
+        .logout-btn { position:absolute; top:20px; right:20px; padding:8px 15px; background:#dc3545; color:white; text-decoration:none; border-radius:5px; }
+        .logout-btn:hover { background:#a71d2a; }
+        .billing-btn { display:block; width:200px; margin:20px auto; text-align:center; padding:12px; background:#28a745; color:white; text-decoration:none; border-radius:6px; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,0.2); }
+        .billing-btn:hover { background:#1e7e34; }
+        .approve-btn { background:#28a745; color:white; padding:6px 12px; border-radius:5px; text-decoration:none; }
+        .approve-btn:hover { background:#1e7e34; }
+        .reject-btn { background:#dc3545; color:white; padding:6px 12px; border-radius:5px; text-decoration:none; }
+        .reject-btn:hover { background:#a71d2a; }
+        .confirm-btn { background:#28a745; color:white; padding:6px 12px; border-radius:5px; text-decoration:none; }
+        .confirm-btn:hover { background:#1e7e34; }
+    </style>
+</head>
+<body>
+    <a href="/logout" class="logout-btn">Logout</a>
+    <h1>📦 Inventory Dashboard</h1>
+
+    <!-- Search Form -->
+    <div class="form-section">
+        <h2>Search Products</h2>
+        <form action="/search" method="POST">
+            <input type="text" name="query" placeholder="Enter product name or company">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Add Product Form -->
+    <div class="form-section">
+        <h2>Add Product</h2>
+        <form action="/add" method="POST">
+            <input type="text" name="name" placeholder="Product Name" required>
+            <input type="number" name="qty" placeholder="Quantity" required>
+            <input type="text" name="category" placeholder="Category">
+            <input type="text" name="company" placeholder="Company">
+            <input type="number" step="0.01" name="price" placeholder="Price">
+            <button type="submit">Add</button>
+        </form>
+    </div>
+
+    <!-- Billing Button -->
+    <a href="/billing" class="billing-btn">🧾 Go to Billing</a>
+
+    <!-- Inventory Table -->
+    <h2 style="text-align:center;">Current Inventory</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Product</th><th>Quantity</th><th>Category</th><th>Company</th><th>Price</th>
+        </tr>
+        {% for pid, data in inventory.items() %}
+        <tr>
+            <td>{{ pid }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.category }}</td>
+            <td>{{ data.company }}</td>
+            <td>₹{{ data.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Pending Customers Table -->
+    <h2 style="text-align:center; margin-top:40px;">👥 Pending Customer Approvals</h2>
+    <table>
+        <tr>
+            <th>Username</th><th>Email</th><th>Address</th><th>Status</th><th>Action</th>
+        </tr>
+        {% for uname, data in customers.items() %}
+            {% if data.status == "pending" %}
+            <tr>
+                <td>{{ uname }}</td>
+                <td>{{ data.email }}</td>
+                <td>{{ data.address }}</td>
+                <td>{{ data.status }}</td>
+                <td>
+                    <a href="/approve_customer/{{ uname }}" class="approve-btn">Approve</a>
+                    <a href="/reject_customer/{{ uname }}" class="reject-btn">Reject</a>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    <!-- Pending Orders Table -->
+    <h2 style="text-align:center; margin-top:40px;">🧾 Pending Orders</h2>
+    <table>
+        <tr>
+            <th>Customer</th><th>Email</th><th>Address</th><th>Total</th><th>Action</th>
+        </tr>
+        {% for o in orders %}
+        <tr>
+            <td>{{ o.customer }}</td>
+            <td>{{ o.email }}</td>
+            <td>{{ o.address }}</td>
+            <td>₹{{ o.total }}</td>
+            <td>
+                <a href="/confirm_billing/{{ o.customer }}" class="confirm-btn">Confirm Billing</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

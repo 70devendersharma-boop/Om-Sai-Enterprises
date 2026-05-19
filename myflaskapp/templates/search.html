@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        table { width: 80%; margin: auto; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: #007bff; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .back-btn {
+            display:inline-block; 
+            padding:12px 25px; 
+            background:#007bff; 
+            color:white; 
+            text-decoration:none; 
+            border-radius:6px; 
+            font-weight:bold; 
+            box-shadow:0 2px 6px rgba(0,0,0,0.2);
+        }
+        .back-btn:hover { background:#0056b3; }
+    </style>
+</head>
+<body>
+    <p style="text-align:right; margin:10px;">
+    <a href="/logout" style="padding:8px 15px; background:#dc3545; color:white; text-decoration:none; border-radius:5px;">
+        Logout
+    </a>
+</p>
+
+    <h1>🔍 Search Results for "{{ query }}"</h1>
+
+    {% if results %}
+        <table>
+            <tr>
+                <th>Product</th><th>Quantity</th><th>Category</th><th>Company</th><th>Price</th>
+            </tr>
+            {% for product, data in results %}
+            <tr>
+                <td>{{ product }}</td>
+                <td>{{ data.qty }}</td>
+                <td>{{ data.category }}</td>
+                <td>{{ data.company }}</td>
+                <td>₹{{ data.price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>❌ No exact match found.</p>
+        {% if recommendations %}
+            <h2>Did you mean:</h2>
+            <table>
+                <tr>
+                    <th>Product</th><th>Quantity</th><th>Category</th><th>Company</th><th>Price</th>
+                </tr>
+                {% for product, data in recommendations %}
+                <tr>
+                    <td>{{ product }}</td>
+                    <td>{{ data.qty }}</td>
+                    <td>{{ data.category }}</td>
+                    <td>{{ data.company }}</td>
+                    <td>₹{{ data.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No similar products found in stock.</p>
+        {% endif %}
+    {% endif %}
+
+    <p style="text-align:center; margin-top:30px;">
+        <a href="/" class="back-btn">⬅ Back to Inventory</a>
+    </p>
+</body>
+</html>

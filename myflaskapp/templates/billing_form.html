@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Billing - OM SAI ENTERPRISES</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f4f6f9; }
+        .header { text-align:center; margin:20px; }
+        .header h1 { color:#007bff; }
+        table { width:80%; margin:auto; border-collapse:collapse; }
+        th, td { padding:8px; text-align:center; }
+        input { padding:6px; border:1px solid #ccc; border-radius:4px; }
+        .btn { margin:10px; padding:10px 20px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer; }
+        .btn:hover { background:#1e7e34; }
+        .add-btn { background:#007bff; }
+        .add-btn:hover { background:#0056b3; }
+    </style>
+    <script>
+        function addRow() {
+            let table = document.getElementById("billingTable");
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td><input type="text" name="name" placeholder="Product Name" required></td>
+                <td><input type="number" name="qty" placeholder="Quantity" required></td>
+                <td><input type="number" step="0.01" name="price" placeholder="Price" required></td>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>🧾 OM SAI ENTERPRISES Billing</h1>
+    </div>
+    <form method="POST">
+        <table id="billingTable">
+            <tr>
+                <td><input type="text" name="name" placeholder="Product Name" required></td>
+                <td><input type="number" name="qty" placeholder="Quantity" required></td>
+                <td><input type="number" step="0.01" name="price" placeholder="Price" required></td>
+            </tr>
+        </table>
+        <button type="button" class="btn add-btn" onclick="addRow()">➕ Add Product</button>
+        <button type="submit" class="btn">Generate Bill</button>
+    </form>
+</body>
+</html>
